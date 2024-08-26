@@ -8,14 +8,12 @@ data class PostResponse(
     val id: String,
     val user: String,
     val message: String,
-    val img: String,
-    var likes: Int
+    val img: String
 )
 
 fun Post.toPostResponse() = PostResponse(
     id = id,
     user = user,
     message = message,
-    img = img,
-    likes = likes
+    img = img
 )

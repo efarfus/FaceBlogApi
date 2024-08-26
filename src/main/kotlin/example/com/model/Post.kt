@@ -6,8 +6,7 @@ data class Post(
     val id: String,
     val user: String,
     val message: String,
-    val img: String,
-    var likes: Int
+    val img: String
 )
 
 object Posts : Table() {
@@ -15,7 +14,5 @@ object Posts : Table() {
     val user = text("user")
     val message = text("message")
     val img = text("img")
-    val likes = integer("likes")
-
     override val primaryKey = PrimaryKey(id)
 }

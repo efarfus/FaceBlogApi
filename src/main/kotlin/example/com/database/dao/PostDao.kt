@@ -2,7 +2,6 @@ package example.com.database.dao
 
 import example.com.model.Post
 import example.com.model.Posts
-import example.com.model.Posts.likes
 import example.com.model.Posts.message
 import example.com.model.Posts.user
 import example.com.model.User
@@ -17,8 +16,7 @@ class PostDao {
                 id = it[Posts.id],
                 user = it[Posts.user],
                 message = it[Posts.message],
-                img = it[Posts.img],
-                likes = it[Posts.likes]
+                img = it[Posts.img]
             )
         }
     }
@@ -30,16 +28,13 @@ class PostDao {
                 it[user] = post.user
                 it[message] = post.message
                 it[img] = post.img
-                it[likes] = post.likes
             }
-            // Return the user that was inserted
             insertStatement.resultedValues?.singleOrNull()?.let {
                 Post(
                     id = it[Posts.id],
                     user = it[Posts.user],
                     message = it[Posts.message],
-                    img = it[Posts.img],
-                    likes = it[Posts.likes]
+                    img = it[Posts.img]
                 )
             }
         }
@@ -51,7 +46,6 @@ class PostDao {
                 it[user] = post.user
                 it[message] = post.message
                 it[Posts.img] = post.img
-                it[likes] = post.likes
             } > 0
         }
     }
@@ -78,8 +72,7 @@ class PostDao {
                     id = it[Posts.id],
                     user = it[Posts.user],
                     message = it[Posts.message],
-                    img = it[Posts.img],
-                    likes = it[Posts.likes]
+                    img = it[Posts.img]
                 )
             }.firstOrNull()
     }
@@ -94,7 +87,13 @@ class PostDao {
 
     suspend fun delete(id: String): Boolean {
         return dbQuery {
-            Users.deleteWhere { Posts.id eq id } > 0
+            Posts.deleteWhere { Posts.id eq id } > 0
+        }
+    }
+
+    suspend fun deleteAll(): Boolean {
+        return dbQuery {
+            Posts.deleteAll() > 0
         }
     }
 
@@ -104,7 +103,6 @@ class PostDao {
             this[Posts.user] = post.user
             this[Posts.message] = post.message
             this[Posts.img] = post.img
-            this[Posts.likes] = post.likes
         }
     }
 }

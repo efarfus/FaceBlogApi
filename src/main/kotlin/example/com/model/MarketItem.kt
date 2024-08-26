@@ -1,7 +1,9 @@
 package example.com.model
 
+import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Table
 
+@Serializable
 data class MarketItem(
     val id: Long = 0,
     val user: String,

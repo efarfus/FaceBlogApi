@@ -15,4 +15,6 @@ class PostRepository(
     suspend fun saveAll(posts: List<Post>) = dao.saveAll(posts)
 
     suspend fun delete(id: String) = dao.delete(id)
+
+    suspend fun deleteAll() = dao.deleteAll()
 }

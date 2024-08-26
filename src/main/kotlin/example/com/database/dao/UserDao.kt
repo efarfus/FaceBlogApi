@@ -48,6 +48,7 @@ class UserDao {
                 it[name] = user.name
                 it[email] = user.email
                 it[password] = user.password
+                it[img] = user.img
             } > 0
         }
     }
@@ -92,6 +93,10 @@ class UserDao {
         return dbQuery {
             Users.deleteWhere { Users.id eq id } > 0
         }
+    }
+
+    suspend fun deleteAll(): Boolean = dbQuery{
+        Users.deleteAll() > 0
     }
 
     suspend fun saveAll(users: List<User>) = dbQuery {

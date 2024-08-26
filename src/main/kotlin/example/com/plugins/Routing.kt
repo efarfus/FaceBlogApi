@@ -17,9 +17,11 @@ fun Application.configureRouting() {
 
     // user
     routing {
+
         get("/") {
-            call.respondText("Api User funcionando")
+            call.respondText("API funcionando.")
         }
+
 
         // verificar se senha o usuario é igual a senha do banco, usando o email
         get("/users/login") {
@@ -75,6 +77,7 @@ fun Application.configureRouting() {
             }
         }
 
+
         post("/users") {
             try {
                 val request = call.receive<UserRequest>()
@@ -86,7 +89,7 @@ fun Application.configureRouting() {
                 call.respondText("Erro ao gravar usuario $e", status = HttpStatusCode.BadRequest)
             }
         }
-
+        
         delete("/users/{id}") {
             val id = call.parameters["id"]
             if (id == null) {
@@ -97,6 +100,15 @@ fun Application.configureRouting() {
                 call.respondText("Usuário deletado", status = HttpStatusCode.OK)
             } else {
                 call.respondText("Erro ao deletar usuario", status = HttpStatusCode.BadRequest)
+            }
+        }
+
+        delete("/users") {
+
+            if (userRepository.deleteAll()) {
+                call.respondText("Usuários deletados", status = HttpStatusCode.OK)
+            } else {
+                call.respondText("Erro ao deletar os usuarios", status = HttpStatusCode.BadRequest)
             }
         }
     }
@@ -162,16 +174,19 @@ fun Application.configureRouting() {
             call.respond(response)
         }
 
-        put("/posts") {
+        post("/posts") {
             try {
                 val request = call.receive<PostRequest>()
-                postRepository.save(request.toPost())?.let {
+                val post = request.toPost()
+
+                postRepository.save(post)?.let {
                     call.respondText("Post gravado", status = HttpStatusCode.Created)
                 } ?: call.respondText("Erro ao gravar post", status = HttpStatusCode.BadRequest)
             } catch (e: Exception) {
-                call.respondText("Erro ao gravar post $e", status = HttpStatusCode.BadRequest)
+                call.respondText("Erro ao gravar post: ${e.message}", status = HttpStatusCode.BadRequest)
             }
         }
+
 
         delete("/posts/{id}") {
             val id = call.parameters["id"]
@@ -182,5 +197,17 @@ fun Application.configureRouting() {
             postRepository.delete(id)
             call.respondText("Post deletado", status = HttpStatusCode.OK)
         }
+
+        delete("/posts") {
+            try {
+                postRepository.deleteAll()
+                call.respondText("Posts deletados", status = HttpStatusCode.OK)
+            } catch (e: Exception) {
+                call.respondText("Posts não deletados, erro", status = HttpStatusCode.BadRequest)
+            }
+
+        }
+
     }
+
 }

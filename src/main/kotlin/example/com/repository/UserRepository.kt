@@ -19,4 +19,6 @@ class UserRepository(
     suspend fun save(user: User) = dao.save(user)
 
     suspend fun delete(id: String) = dao.delete(id)
+
+    suspend fun deleteAll() = dao.deleteAll()
 }
