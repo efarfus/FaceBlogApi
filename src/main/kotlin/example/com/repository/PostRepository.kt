@@ -2,6 +2,7 @@ package example.com.repository
 
 import example.com.database.dao.PostDao
 import example.com.model.Post
+import example.com.model.Posts.user
 
 class PostRepository(
     private val dao: PostDao = PostDao()
@@ -17,4 +18,6 @@ class PostRepository(
     suspend fun delete(id: String) = dao.delete(id)
 
     suspend fun deleteAll() = dao.deleteAll()
+
+    suspend fun getUserPost(user: String) = dao.getPostsUser(user)
 }

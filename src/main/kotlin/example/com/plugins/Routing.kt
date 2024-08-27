@@ -1,6 +1,7 @@
 package example.com.plugins
 
 import example.com.dto.*
+import example.com.model.Post
 import example.com.repository.MarketItemRepository
 import example.com.repository.PostRepository
 import example.com.repository.UserRepository
@@ -135,6 +136,16 @@ fun Application.configureRouting() {
             call.respond(response)
         }
 
+        delete("/marketItem/{id}") {
+            val id = call.parameters["id"]
+            if (id == null) {
+                call.respond(HttpStatusCode.BadRequest)
+                return@delete
+            }
+            marketItemRepository.delete(id.toLong())
+            call.respondText("Post deletado", status = HttpStatusCode.OK)
+            }
+
         post("/marketItem") {
             try {
                 val request = call.receive<MarketItemRequest>()
@@ -151,6 +162,22 @@ fun Application.configureRouting() {
     routing {
         get("/post") {
             call.respondText("Post disponível")
+        }
+        get("/posts/user/{user}") {
+            val user = call.parameters["user"]
+            if (user == null) {
+                call.respond(HttpStatusCode.BadRequest, "Username is required")
+                return@get
+            }
+
+            val response = postRepository.getUserPost(user)
+
+            if (response.isEmpty()) {
+                call.respond(HttpStatusCode.NotFound, "No posts found for user: $user")
+                return@get
+            }
+
+            call.respond(response.map(Post::toPostResponse))
         }
 
         get("/posts/{id}") {
@@ -173,6 +200,7 @@ fun Application.configureRouting() {
             }
             call.respond(response)
         }
+
 
         post("/posts") {
             try {

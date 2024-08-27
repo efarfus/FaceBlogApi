@@ -21,6 +21,20 @@ class PostDao {
         }
     }
 
+    suspend fun getPostsUser(user: String): List<Post> {
+        return dbQuery {
+            Posts.selectAll().where { Posts.user eq user }
+                .map {
+                    Post(
+                        id = it[Posts.id],
+                        user = it[Posts.user],
+                        message = it[Posts.message],
+                        img = it[Posts.img]
+                    )
+                }
+        }
+    }
+
     suspend fun save(post: Post) =
         dbQuery {
             val insertStatement = Posts.insert {
@@ -38,7 +52,6 @@ class PostDao {
                 )
             }
         }
-
     suspend fun update(post: Post): Boolean {
         return dbQuery {
             Users.update({ Users.id eq post.id }) {
