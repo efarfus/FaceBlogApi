@@ -13,7 +13,7 @@ class MarketItemRepository(
 
     suspend fun getById(id: Long) = dao.findById(id)
 
-    suspend fun save(marketItem: MarketItem) = dao.save(marketItem)
+    suspend fun save(marketItem: MarketItem) = dao.save(marketItem)//
 
     suspend fun saveAll(marketItems: List<MarketItem>) = dao.saveAll(marketItems)
 
